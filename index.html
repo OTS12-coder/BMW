@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMW - The Ultimate Driving Machine</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700;800;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Car Details Popup -->
+    <div id="car-details-popup" class="car-details-popup">
+        <div class="car-details-content">
+            <button id="close-details" class="close-details">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <div class="details-image" id="details-image"></div>
+            
+            <div class="details-info">
+                <h2 id="details-title" class="details-title"></h2>
+                <p id="details-subtitle" class="details-subtitle"></p>
+                
+                <div class="details-specs">
+                    <div class="spec-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <div>
+                            <span class="spec-label">0-100 km/h</span>
+                            <span id="spec-acceleration" class="spec-value"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="spec-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                        <div>
+                            <span class="spec-label">Power</span>
+                            <span id="spec-power" class="spec-value"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="spec-item">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="6"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                        </svg>
+                        <div>
+                            <span class="spec-label">Engine</span>
+                            <span id="spec-engine" class="spec-value"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="details-description" class="details-description"></div>
+                
+                <div class="details-features">
+                    <h3 class="features-title">Key Features</h3>
+                    <ul id="details-features-list" class="features-list"></ul>
+                </div>
+                
+                <button class="contact-dealer-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Contact Dealer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Popup -->
+    <div id="notification-popup" class="notification-popup">
+        <div class="notification-content">
+            <div class="notification-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+            </div>
+            <p id="notification-message" class="notification-message"></p>
+        </div>
+    </div>
+    <!-- Image URLs Configuration -->
+    <script>
+        // Edit these image URLs to customize the website
+        // Replace with your local image paths
+        const CAR_IMAGES = {
+            m4: {
+                front: 'images/m4-front.jpg',
+                side: 'images/m4-side.jpg',
+                wheels: 'images/m4-wheels.jpg',
+                brakes: 'images/m4-brakes.jpg',
+                carbon: 'images/m4-carbon.jpg'
+            },
+            i7: {
+                front: 'images/i7-front.jpg',
+                interior: 'images/i7-interior.jpg',
+                tech: 'images/i7-tech.jpg'
+            },
+            x6: {
+                mountain: 'images/x6-mountain.jpg',
+                wide: 'images/x6-wide.jpg',
+                centered: 'images/x6-centered.jpg'
+            },
+            showcase: {
+                car1: 'images/showcase-m4.jpg',
+                car2: 'images/showcase-i7.jpg',
+                car3: 'images/x6-wide.jpg',
+                car4: 'images/showcase-m8.jpg'
+            }
+        };
+    </script>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-container">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle id="loading-circle" cx="60" cy="60" r="54" stroke="currentColor" stroke-width="2" fill="none"/>
+            </svg>
+            <div class="loading-text">BMW</div>
+        </div>
+    </div>
+
+    <!-- Grain Texture Overlay -->
+    <div class="grain-overlay"></div>
+
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+        <svg id="moon-icon" class="theme-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg id="sun-icon" class="theme-icon hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-track"></div>
+        <div id="scroll-progress" class="scroll-progress"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div id="main-container" class="main-container">
+
+        <!-- Scene 1: Intro -->
+        <section id="intro-scene" class="scene intro-scene">
+            <div class="intro-bg"></div>
+            <div class="intro-content">
+                <h1 class="intro-title">
+                    Performance is not created.<br>
+                    It is engineered.
+                </h1>
+                <div class="intro-line"></div>
+            </div>
+            <div class="scroll-hint">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+        </section>
+
+        <!-- BMW History Section -->
+        <section id="bmw-history" class="scene bmw-history">
+            <div class="history-content">
+                <div class="history-badge">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW Logo" class="bmw-logo">
+                </div>
+                
+                <div class="history-text">
+                    <span class="history-year">Since 1916</span>
+                    <h2 class="history-title">A Century of Excellence</h2>
+                    <p class="history-description">
+                        From aircraft engines to the ultimate driving machines, BMW has been at the forefront of automotive innovation for over a century. Founded in Munich, Germany, Bayerische Motoren Werke began as a manufacturer of aircraft engines before transitioning to motorcycles and eventually luxury automobiles. Today, BMW stands as a symbol of precision engineering, cutting-edge technology, and uncompromising performance. Every vehicle bearing the iconic roundel represents decades of racing heritage, innovative design, and the relentless pursuit of driving perfection.
+                    </p>
+                    
+                    <div class="history-stats">
+                        <div class="history-stat">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-text">Years of Innovation</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="stat-number">150+</div>
+                            <div class="stat-text">Countries Worldwide</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="stat-number">2.5M+</div>
+                            <div class="stat-text">Vehicles Annually</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BMW M4 Competition - Section 1: Reveal -->
+        <section id="m4-reveal" class="scene m4-reveal">
+            <div class="car-image-container">
+                <div class="car-image m4-front"></div>
+                <div class="headlight-glow"></div>
+            </div>
+            <h2 class="car-title">Pure Aggression.</h2>
+        </section>
+
+        <!-- BMW M4 Competition - Section 2: Speed -->
+        <section id="m4-speed" class="scene m4-speed">
+            <div class="car-image-container">
+                <div class="car-image m4-side"></div>
+            </div>
+            <div class="speed-display">
+                <div class="speed-counter">
+                    <span id="speed-value">0</span>
+                    <span class="speed-unit">km/h</span>
+                </div>
+                <div class="rpm-bar-container">
+                    <div class="rpm-bar-bg">
+                        <div id="rpm-bar" class="rpm-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BMW M4 Competition - Section 3: Details -->
+        <section id="m4-details" class="scene m4-details">
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-image carbon-fiber"></div>
+                    <p class="detail-label">Carbon Fiber Details</p>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-image wheels"></div>
+                    <p class="detail-label">Performance Wheels</p>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-image brakes"></div>
+                    <p class="detail-label">M Sport Brakes</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BMW i7 - Section 1: Silent Arrival -->
+        <section id="i7-arrival" class="scene i7-arrival">
+            <div class="car-image-container">
+                <div class="car-image i7-front"></div>
+                <div class="blue-glow"></div>
+            </div>
+            <div class="i7-title-container">
+                <h2 class="i7-title-light">Silence.</h2>
+                <h2 class="i7-title-bold">Reinvented.</h2>
+            </div>
+        </section>
+
+        <!-- BMW i7 - Section 2: Interior Luxury -->
+        <section id="i7-interior" class="scene i7-interior">
+            <div class="interior-grid">
+                <div class="interior-image"></div>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div>
+                                <p class="stat-label">Range</p>
+                                <p class="stat-value">625 km</p>
+                            </div>
+                            <svg class="stat-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div>
+                                <p class="stat-label">Digital Dashboard</p>
+                                <p class="stat-value">31.3"</p>
+                            </div>
+                            <svg class="stat-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <div>
+                                <p class="stat-label">Electric Power</p>
+                                <p class="stat-value">536 hp</p>
+                            </div>
+                            <svg class="stat-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <circle cx="12" cy="12" r="6"></circle>
+                                <circle cx="12" cy="12" r="2"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BMW i7 - Section 3: Tech Focus -->
+        <section id="i7-tech" class="scene i7-tech">
+            <div class="car-image-container">
+                <div class="car-image i7-tech-bg"></div>
+            </div>
+            <h2 class="tech-title">The Future is Electric.</h2>
+        </section>
+
+        <!-- BMW X6 - Section 1: Elevated View -->
+        <section id="x6-elevated" class="scene x6-elevated">
+            <div class="car-image-container">
+                <div class="car-image x6-mountain"></div>
+            </div>
+            <h2 class="x6-title">Command the Road.</h2>
+        </section>
+
+        <!-- BMW X6 - Section 2: Power & Presence -->
+        <section id="x6-power" class="scene x6-power">
+            <div class="car-image-container">
+                <div class="car-image x6-wide"></div>
+                <div class="dark-overlay"></div>
+            </div>
+            <div class="vehicle-shadow"></div>
+        </section>
+
+        <!-- BMW X6 - Section 3: Final Statement -->
+        <section id="x6-final" class="scene x6-final">
+            <div class="car-image-container">
+                <div class="car-image x6-centered"></div>
+            </div>
+            
+            <div class="final-number">03</div>
+            
+            <div class="final-content">
+                <h2 class="final-title">Choose Your Machine.</h2>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section id="final-cta" class="scene final-cta">
+            <div class="cta-container">
+                <button class="cta-button">
+                    <span class="cta-text">EXPLORE BMW</span>
+                    <div class="cta-shine"></div>
+                </button>
+                <p class="cta-tagline">THE ULTIMATE DRIVING MACHINE</p>
+            </div>
+        </section>
+
+        <!-- Numbered Showcase Section -->
+        <section class="numbered-showcase">
+            <div class="showcase-item clickable-car" data-car="m4">
+                <div class="showcase-content">
+                    <div class="showcase-details">
+                        <div class="showcase-number">01</div>
+                        <h3 class="showcase-title">BMW M4 Competition</h3>
+                        <p class="showcase-description">
+                            A masterpiece of engineering with a 3.0L twin-turbo inline-6 engine delivering 503 hp. 
+                            Experience 0-100 km/h in just 3.9 seconds with M xDrive all-wheel drive system. 
+                            Carbon fiber roof, adaptive M suspension, and aggressive aerodynamics define ultimate performance. 
+                            The perfect balance of track capability and daily usability in a luxury sports coupe.
+                        </p>
+                        <button class="view-details-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            View Details
+                        </button>
+                    </div>
+                    <div class="showcase-image" id="showcase-img-1"></div>
+                </div>
+            </div>
+
+            <div class="showcase-item clickable-car reverse" data-car="i7">
+                <div class="showcase-content reverse">
+                    <div class="showcase-details">
+                        <div class="showcase-number">02</div>
+                        <h3 class="showcase-title">BMW i7 xDrive60</h3>
+                        <p class="showcase-description">
+                            Electric luxury redefined with dual-motor all-wheel drive producing 536 hp. 
+                            Enjoy up to 625 km of range with BMW's latest battery technology and ultra-fast charging. 
+                            The 31.3-inch BMW Theatre Screen transforms rear seats into a cinematic experience. 
+                            Executive Drive Pro ensures absolute comfort while sustainable luxury meets cutting-edge innovation.
+                        </p>
+                        <button class="view-details-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            View Details
+                        </button>
+                    </div>
+                    <div class="showcase-image" id="showcase-img-2"></div>
+                </div>
+            </div>
+
+            <div class="showcase-item clickable-car" data-car="x6">
+                <div class="showcase-content">
+                    <div class="showcase-details">
+                        <div class="showcase-number">03</div>
+                        <h3 class="showcase-title">BMW X6 M50i</h3>
+                        <p class="showcase-description">
+                            Commanding presence meets sports car performance in this luxury SAV. 
+                            The 4.4L V8 TwinPower Turbo engine delivers 523 hp with M Sport exhaust soundtrack. 
+                            Adaptive M suspension and integral active steering provide dynamic handling and supreme comfort. 
+                            Bold coupe-like silhouette combined with spacious interior makes every journey unforgettable.
+                        </p>
+                        <button class="view-details-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            View Details
+                        </button>
+                    </div>
+                    <div class="showcase-image" id="showcase-img-3"></div>
+                </div>
+            </div>
+
+            <div class="showcase-item clickable-car reverse" data-car="m8">
+                <div class="showcase-content reverse">
+                    <div class="showcase-details">
+                        <div class="showcase-number">04</div>
+                        <h3 class="showcase-title">BMW M8 Competition</h3>
+                        <p class="showcase-description">
+                            The pinnacle of BMW M performance with a 4.4L V8 producing an incredible 625 hp. 
+                            M xDrive all-wheel drive with rear-bias mode delivers explosive acceleration to 100 km/h in 3.2 seconds. 
+                            Carbon fiber components, active M differential, and M compound brakes ensure track-ready capability. 
+                            Luxurious cabin meets motorsport heritage in this ultimate grand touring machine.
+                        </p>
+                        <button class="view-details-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            View Details
+                        </button>
+                    </div>
+                    <div class="showcase-image" id="showcase-img-4"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW Logo" class="bmw-logo-footer">
+                    </div>
+                    <h2 class="footer-brand-name">BMW</h2>
+                    <p class="footer-tagline">Sheer Driving Pleasure</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4 class="footer-column-title">Models</h4>
+                        <ul class="footer-list">
+                            <li><a href="#m4-reveal">M4 Competition</a></li>
+                            <li><a href="#i7-arrival">i7 Electric</a></li>
+                            <li><a href="#x6-elevated">X6 M50i</a></li>
+                            <li><a href="#">M8 Competition</a></li>
+                            <li><a href="#">All Models</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4 class="footer-column-title">Services</h4>
+                        <ul class="footer-list">
+                            <li><a href="#">Book Test Drive</a></li>
+                            <li><a href="#">Configure Your BMW</a></li>
+                            <li><a href="#">Find a Dealer</a></li>
+                            <li><a href="#">Financial Services</a></li>
+                            <li><a href="#">BMW Care</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4 class="footer-column-title">Innovation</h4>
+                        <ul class="footer-list">
+                            <li><a href="#">Electric Mobility</a></li>
+                            <li><a href="#">Autonomous Driving</a></li>
+                            <li><a href="#">ConnectedDrive</a></li>
+                            <li><a href="#">BMW M Performance</a></li>
+                            <li><a href="#">Sustainability</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4 class="footer-column-title">Company</h4>
+                        <ul class="footer-list">
+                            <li><a href="#">About BMW</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Press Center</a></li>
+                            <li><a href="#">Investor Relations</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-social">
+                <h4 class="footer-social-title">Follow BMW</h4>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/BMW" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/bmw/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://twitter.com/BMW" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/user/BMW" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="YouTube">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/bmw" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <div class="footer-legal">
+                        <p>&copy; 2026 BMW AG. All rights reserved.</p>
+                        <div class="footer-legal-links">
+                            <a href="#">Privacy Policy</a>
+                            <span class="separator">|</span>
+                            <a href="#">Cookie Policy</a>
+                            <span class="separator">|</span>
+                            <a href="#">Legal Notice</a>
+                            <span class="separator">|</span>
+                            <a href="#">Terms of Use</a>
+                        </div>
+                    </div>
+                    <div class="footer-language">
+                        <button class="language-selector">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                            </svg>
+                            <span>English (US)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
